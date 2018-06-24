@@ -5,7 +5,7 @@ export default class StartUI extends Component {
     constructor(props){
         super(props)
         this.state = {
-            dealer: undefined,
+            master: undefined,
             page: "start",
             playerName: undefined,
             password: undefined,
@@ -100,7 +100,7 @@ export default class StartUI extends Component {
         if (this.state.page == "TableName&Password"){
             return(
                 <View style={{padding: 30}}>
-                    <Text>dealer: {this.state.dealer?'true':'false'}</Text>
+                    <Text>master: {this.state.master?'true':'false'}</Text>
                     <Text>Enter Table Name: </Text>
                     <TextInput
                         placeholder = "enter table name here"
