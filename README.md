@@ -37,7 +37,9 @@ other notes:
   also you shouldn't have to worry about the name of the gamefile
   or the password or table name or any of that, it should all be
   handled by the startUI
-
+  Also each gamefile should start with the name of the game (eg. hearts)
+  so that if a new player joins a game they know what game it is
+  (I am building the startUI with this assumption in place)
 
 
 

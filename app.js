@@ -3,6 +3,7 @@ import {AppRegistry, Text, View, Button, TextInput} from 'react-native';
 
 import StartUI from './components/StartUI/StartUI';
 
+
 export default class myapp extends Component{
 	render(){
 		return(

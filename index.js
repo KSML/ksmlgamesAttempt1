@@ -1,5 +1,5 @@
 import { AppRegistry } from 'react-native';
 import App from './app';
-import Texting from './components/Texting/Texting';
+import StartUI from './components/StartUI/StartUI';
 
 AppRegistry.registerComponent('texting', () => App);

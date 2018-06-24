@@ -1,5 +1,9 @@
 import React, {Component} from 'react';
-import { AppRegistry, Text, TextInput, View, Button} from 'react-native';
+import { AppRegistry, Text, TextInput, View, Button, FlatList} from 'react-native';
+
+
+
+
 
 export default class StartUI extends Component {
     constructor(props){
@@ -20,9 +24,22 @@ export default class StartUI extends Component {
         this.onChangePassword = this.onChangePassword.bind(this)
         this.onChangePlayerName = this.onChangePlayerName.bind(this)
         
+        this.HeartsPressed = this.HeartsPressed.bind(this)
+        this.HighCardPressed = this.HighCardPressed.bind(this)
+        
         this.create = this.create.bind(this)
         this.join = this.join.bind(this)
     }
+    
+    HeartsPressed(){
+        
+    }
+    
+    HighCardPressed(){
+        
+    }
+    
+    
     
     
     
@@ -80,12 +97,12 @@ export default class StartUI extends Component {
 
 
 
-    create(){
-        this.setState({dealer: true, page: "TableName&Password"})
+    join(){
+        this.setState({master: false, page: "join"})
     }
     
-    join(){
-        this.setState({dealer: false, page: "TableName&Password"})
+    create(){
+        this.setState({master: true, page: "create"})
     }
 
     render(){
@@ -97,10 +114,9 @@ export default class StartUI extends Component {
                 </View>
             )
         }
-        if (this.state.page == "TableName&Password"){
-            return(
-                <View style={{padding: 30}}>
-                    <Text>master: {this.state.master?'true':'false'}</Text>
+        else if (this.state.page == "join"){
+            return(<View style={{padding: 30}}>
+                    <Text>master: {this.state.master?"True":"False"}</Text>
                     <Text>Enter Table Name: </Text>
                     <TextInput
                         placeholder = "enter table name here"
@@ -117,10 +133,37 @@ export default class StartUI extends Component {
                         onChangeText = {this.onChangePlayerName}
                         onSubmitEditing = {() => {}}/>
                     <Button title="Submit" onPress={() => this.onSubmit()}/>
-                </View>
-            )
+                </View>)
         }
-        if (this.state.page == "invalid Credentials"){
+        else if (this.state.page == "create"){
+            return(<View style={{padding: 30}}>
+                    <Text>master: {this.state.master?"True":"False"}</Text>
+                    <Text>Enter Table Name: </Text>
+                    <TextInput
+                        placeholder = "enter table name here"
+                        onChangeText = {this.onChangeTableName}
+                        onSubmitEditing = {() => {}}/>
+                    <Text>Enter Password: </Text>
+                    <TextInput
+                        placeholder = "enter password here"
+                        onChangeText = {this.onChangePassword}
+                        onSubmitEditing = {() => {}}/>
+                    <Text>Enter Player Name: </Text>
+                    <TextInput
+                        placeholder = "enter player name here"
+                        onChangeText = {this.onChangePlayerName}
+                        onSubmitEditing = {() => {}}/>
+                    <Button title="Submit" onPress={() => this.onSubmit()}/>
+                    <Text>Choose a game</Text>
+                    <FlatList
+                        data={[{key: 'Hearts'},
+                              {key: 'HighCard'},
+                              ]}
+                        renderItem = {({item}) => <Text>{item.key}</Text>}
+                    />
+                </View>)
+        }
+        else if (this.state.page == "invalid Credentials"){
             return (
                 <View style={{padding: 30}}>
                 </View>
@@ -136,6 +179,9 @@ export default class StartUI extends Component {
         
     }
 }
+
+
+
 
 
 
