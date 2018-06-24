@@ -5,19 +5,40 @@ export default class TestTexting extends Component {
     constructor(props){
         super(props)
         this.state = {
-            page: 1,
-            userName: undefined,
-            roomName: undefined,
+            dealer: undefined,
+            page: "start",
+            playerName: undefined,
+            password: undefined,
+            tableName: undefined,
             userInput: undefined,
             webResponse: ' '
         };
         this.getRequest = this.getRequest.bind(this)
+        
         this.onSubmit = this.onSubmit.bind(this)
-        this.onChange = this.onChange.bind(this)
-        this.decode = this.decode.bind(this)
-        this.encode = this.encode.bind(this)
+        this.onChangeTableName = this.onChangeTableName.bind(this)
+        this.onChangePassword = this.onChangePassword.bind(this)
+        this.onChangePlayerName = this.onChangePlayerName.bind(this)
+        
+        this.create = this.create.bind(this)
+        this.join = this.join.bind(this)
+    }
+    
+    
+    
+    onChangeTableName(){
+        
+    }
+    
+    onChangePassword(){
+        
+    }
+    
+    onChangePlayerName(){
+        
     }
 
+    
     getRequest(input,doWriteResponse){
         // sets webResponse to whatever is returned from the server
         // while the server is responding webPending is set to true
@@ -35,6 +56,8 @@ export default class TestTexting extends Component {
     }
 
     onSubmit(){
+//        this is old code! change this!
+        
         if (this.state.page == 1){
             this.setState({page: this.state.page+1, userName: this.state.userInput})
         }
@@ -53,60 +76,53 @@ export default class TestTexting extends Component {
         }
     }
 
-    onChange(input){
-        // comment
-        this.setState({userInput:input})
+
+
+
+
+    create(){
+        this.setState({dealer: true, page: "TableName&Password"})
     }
-
-
-    encode(input){
-        // comment
-        return "\n"+this.state.userName+": "+input+"\n"
+    
+    join(){
+        this.setState({dealer: false, page: "TableName&Password"})
     }
-
-    decode(input){
-        // comment
-        return input
-    }
-
-
-
 
     render(){
-        if (this.state.page == 1){
+        if (this.state.page == "start"){
             return(
                 <View style={{padding: 30}}>
-                    <Text>Enter user name below:</Text>
-                    <TextInput
-                        placeholder = "enter user name here"
-                        onChangeText = {this.onChange}
-                        onSubmitEditing = {this.onSubmit}/>
+                    <Button title="Create Game" onPress={() => this.create()}/>
+                    <Button title="Join Game" onPress={() => this.join()}/>
                 </View>
             )
         }
-        if (this.state.page == 2){
+        if (this.state.page == "TableName&Password"){
             return(
                 <View style={{padding: 30}}>
-                    <Text>user name is: {this.state.userName}</Text>
-                    <Text>Enter room name below:</Text>
+                    <Text>dealer: {this.state.dealer?'true':'false'}</Text>
+                    <Text>Enter Table Name: </Text>
                     <TextInput
-                        placeholder = "enter room name here"
-                        onChangeText = {this.onChange}
-                        onSubmitEditing = {this.onSubmit}/>
+                        placeholder = "enter table name here"
+                        onChangeText = {this.onChangeTableName}
+                        onSubmitEditing = {() => {}}/>
+                    <Text>Enter Password: </Text>
+                    <TextInput
+                        placeholder = "enter password here"
+                        onChangeText = {this.onChangePassword}
+                        onSubmitEditing = {() => {}}/>
+                    <Text>Enter Player Name: </Text>
+                    <TextInput
+                        placeholder = "enter player name here"
+                        onChangeText = {this.onChangePlayerName}
+                        onSubmitEditing = {() => {}}/>
+                    <Button title="Submit" onPress={() => this.onSubmit()}/>
                 </View>
             )
         }
-        if (this.state.page == 3){
+        if (this.state.page == "invalid Credentials"){
             return (
                 <View style={{padding: 30}}>
-                    <Text>user name is: {this.state.userName}</Text>
-                    <Text>room name is: {this.state.roomName+"\n"}</Text>
-                    <Text>type message here:</Text>
-                    <TextInput placeholder="enter message here"
-                        onChangeText={this.onChange}
-                        onSubmitEditing={this.onSubmit}/>
-                    <Text>{"\nThread:"}</Text>
-                    <Text>{this.decode(this.state.webResponse)}</Text>
                 </View>
             );
         }
