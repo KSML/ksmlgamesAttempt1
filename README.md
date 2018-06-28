@@ -3,6 +3,7 @@ PROBLEM: what if the file is deleted (by the master) and a non master player has
 THING TO ADD: do the thing where the password is hidden with *'s
 
 
+
 CHANGE:
 the read function will simply return the content of a variable called gameFile
 that is stored in the state of the startUI component
