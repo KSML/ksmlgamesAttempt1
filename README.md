@@ -1,3 +1,19 @@
+PROBLEM: what if the file is deleted (by the master) and a non master player hasen't quit yet?
+
+THING TO ADD: do the thing where the password is hidden with *'s
+
+
+CHANGE:
+the read function will simply return the content of a variable called gameFile
+that is stored in the state of the startUI component
+this way you don't have to worry about asynchronous calls
+it will simply get you the current version that is stored locally (on the phone)
+there will be a function running in the background constantly updating the gameFile
+at some frequency (say .2 seconds or so, we can work out what the best frequency is later)
+
+
+
+
 the startUI class after extracting the various info from
 the user returns one of the various game classes such as hearts, texas etc
 it passes as props these four functions in addition to the variables "playerName"
@@ -24,7 +40,8 @@ clear():
   sets the gamefile to an empty string
 
 quit():
-  quits the game
+  quits the game, if the master calls quit then the gamefile is removed
+  otherwise calling quit just leaves the current game
 
 other notes:
   the gamefile has a max length (I can't remember what I set it too)
@@ -40,6 +57,8 @@ other notes:
   Also each gamefile should start with the name of the game (eg. hearts)
   so that if a new player joins a game they know what game it is
   (I am building the startUI with this assumption in place)
+  also the first 10 bytes will contain the name of the game (eg, "hearts    ")
+  (I chose ten because I figure we can keep the names short enough)
 
 
 
