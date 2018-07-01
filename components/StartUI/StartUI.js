@@ -55,7 +55,10 @@ export default class StartUI extends Component {
     
     
     join2(response){
-        if (response != "new: table in use") this.setState({gameName:"wrong password"})
+        if (response != "new: table in use"){
+            this.setState({gameName:"wrong password"})
+            this.goToGame()
+        }
         else{
             ID = "x"+this.state.password+this.state.tableName  // HASH THIS !!!
             this.getRequest("func=read&start=0&length=5&tableID="+ID,this.join3)
