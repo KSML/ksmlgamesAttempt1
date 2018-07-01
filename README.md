@@ -2,6 +2,28 @@ PROBLEM: what if the file is deleted (by the master) and a non master player has
 
 THING TO ADD: do the thing where the password is hidden with *'s
 
+THING TO DO: search "consider checking for errors" in StartUI for a thing to do
+consider the case where the file gets to long and it returns an error
+
+
+
+
+things to change on the server side:
+have error messages start with E and non error messages start with X
+this way its possible for one to read the string "_fatalError"
+from the sharedFile
+
+
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+FIX THIS
+when append is given a non existant table
+fatalError is returned rather than the expected "append: table not found"
+FIX THIS
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+
 
 
 CHANGE:
@@ -58,7 +80,7 @@ other notes:
   Also each gamefile should start with the name of the game (eg. hearts)
   so that if a new player joins a game they know what game it is
   (I am building the startUI with this assumption in place)
-  also the first 10 bytes will contain the name of the game (eg, "hearts    ")
+  also the first 5 bytes will contain the name of the game (eg, "hrts ")
   (I chose ten because I figure we can keep the names short enough)
 
 

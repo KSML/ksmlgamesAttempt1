@@ -11,6 +11,7 @@ export default class StartUI extends Component {
             master: undefined,
             page: "start",
             gameFile: undefined,
+            gameName: undefined,
             playerName: undefined,
             password: undefined,
             tableName: undefined,
@@ -19,33 +20,57 @@ export default class StartUI extends Component {
         this.getRequest = this.getRequest.bind(this)
         
         this.join = this.join.bind(this)
+        this.join2 = this.join2.bind(this)
+        this.join3 = this.join3.bind(this)
         this.create = this.create.bind(this)
+        this.create2 = this.create2.bind(this)
         this.append = this.append.bind(this)
-        this.clear = this.clear.bind(this)
         this.quit = this.quit.bind(this)
-        
+        this.goToGame = this.goToGame.bind(this)
     }
     
     
-    create(input){
-        ID = this.state.password+this.state.tableName  // HASH THIS !!!
-//        getRequest("func=new&tableID="+ID,) // finish this
-        
-        // getRequest("func=new&tableID="+ID,true)
-        // while (this.state.webPending); // wait for table to be made
-        // PUT MORE STUFF HERE
-        // if the credentials are bad, do this:
-        // game = <Text>Table in use</Text>
-        // add a button so you can go back to the start page
-        // also when a game is successfully made write its name in the first 10 bytes
-        // otherwise do this:
-        
-        
-        
-        
-        
-        if (input == "Game1"){
-            this.setState({gameFile:"Game1     ", playing:true})
+    create(gameNameInput){
+        this.setState({gameName:gameNameInput})
+        ID = "x"+this.state.password+this.state.tableName  // HASH THIS !!!
+        this.getRequest("func=new&tableID="+ID,this.create2)
+        // do a loading symbol here
+    }
+    
+    
+    create2(response){
+        ID = "x"+this.state.password+this.state.tableName  // HASH THIS !!!
+        if (response == "new: table in use") this.setState({gameName:"table in use"})
+        else this.getRequest("func=append&input="+this.state.gameName+"&tableID="+ID,()=>{})
+        // consider checking for errors
+        this.goToGame()
+    }
+    
+    
+    join(){
+        ID = "x"+this.state.password+this.state.tableName  // HASH THIS !!!
+        this.getRequest("func=new&tableID="+ID,this.join2)
+        // do a loading symbol here
+    }
+    
+    
+    join2(response){
+        if (response != "new: table in use") this.setState({gameName:"wrong password"})
+        else{
+            ID = "x"+this.state.password+this.state.tableName  // HASH THIS !!!
+            this.getRequest("func=read&start=0&length=5&tableID="+ID,this.join3)
+        }
+    }
+    
+    
+    join3(response){
+        this.setState({gameName:response})
+        this.goToGame()
+    }
+    
+    
+    goToGame(){
+        if (this.state.gameName == "Game1"){
             game = <Game1
                 master = {this.state.master}
                 playerName = {this.state.playerName}
@@ -53,11 +78,9 @@ export default class StartUI extends Component {
                 read = {() => {return this.state.gameFile}}
                 append = {this.append}
                 quit = {this.quit}
-                clear = {this.clear}
             />
         }
-        else if (input == "Game2"){
-            this.setState({gameFile:"Game2     ", playing:true})
+        else if (this.state.gameName == "Game2"){
             game = <Game2
                 master = {this.state.master}
                 playerName = {this.state.playerName}
@@ -65,41 +88,38 @@ export default class StartUI extends Component {
                 read = {() => {return this.state.gameFile}}
                 append = {this.append}
                 quit = {this.quit}
-                clear = {this.clear}
             />
         }
-        else game = <Text>ERROR</Text>
+        else if (this.state.gameName == "wrong password"){
+            game = <View style={{padding: 30}}>
+                <Text>Wrong Password</Text>
+                <Button title="Return to Start Page" onPress={() => {this.setState({page: "start"})}}/>
+            </View>
+        }
+        else if (this.state.gameName == "table in use"){
+            game = <View style={{padding: 30}}>
+                <Text>Table In Use</Text>
+                <Button title="Return to Start Page" onPress={() => {this.setState({page: "start"})}}/>
+            </View>
+        }
+        else game = <View style={{padding: 30}}><Text>unkown game: {this.state.gameName}</Text></View>
         
-        this.setState({page:"gamePage", Game:game})
-    }
-    
-    
-    join(){
-        // FINISH THIS
-        // check for valid credentials and try to join the game, read the game name from the gameFile
-        game = <View style={{padding: 30}}><Text>unknown game (fix this)</Text></View>
-        
-        this.setState({page:"gamePage", Game:game})
+        this.setState({page:"gamePage", Game:game, playing:true})
     }
     
     
     append(input){
-        // later make this a getRequest
-        this.setState({gameFile:this.state.gameFile+input})
-    }
-    
-
-    clear(){
-        // replace this with a get request
-        this.setState({gameFile:this.state.gameFile.substring(0,10)})
+        ID = "x"+this.state.password+this.state.tableName  // HASH THIS !!!
+        this.getRequest("func=append&tableID="+ID+"&input="+input,()=>{})
     }
     
     
     quit(){
-        // replace this with a get request
-        
-        if (this.state.master); // do get request to delete the file, also add a thing that deals with the case
-        // where the file is deleted (by the master) and a non master player hasen't quit yet
+        ID = "x"+this.state.password+this.state.tableName  // HASH THIS !!!
+        if (this.state.master){
+            // do get request to delete game file
+            this.getRequest("func=quit&tableID="+ID,()=>{})
+        }
         
         this.setState({page:"start",
                        gameFile:undefined,
@@ -111,13 +131,16 @@ export default class StartUI extends Component {
     
     
     componentDidMount(){
-        // replace this chunk with code that keeps gameFile updated correctly using getRequests
-        // gameFile is only updated while playing
+        ID = "x"+this.state.password+this.state.tableName  // HASH THIS !!!
         setInterval(() => {
-            if (this.state.playing) this.setState(prevState => ({gameFile: prevState.gameFile+'a'}))
+            if (this.state.playing){ // gameFile is only updated while playing
+                newGameFile = this.getRequest("func=read&tableID="+ID+"&start=0&length=1000",
+                                          (response) => this.setState({gameFile:response}))
+            }
+            // only doing the first 1000 chars, make this bigger if nessisary
         },1000)
     }
-    
+
     
     getRequest(input,func){
         // calls func on whatever is returned from the server

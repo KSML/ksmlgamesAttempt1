@@ -14,7 +14,6 @@ export default class Game1 extends Component {
                 <Text>gameFile: {this.props.read()}</Text>
                 <Button title="append 'asdf'" onPress={() => this.props.append('asdf')}/>
                 <Button title="quit" onPress={() => this.props.quit()}/>
-                <Button title="clear" onPress={() => this.props.clear()}/>
             </View>
         )
     }
