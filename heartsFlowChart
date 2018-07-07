@@ -44,6 +44,59 @@ hearts with swap:
 
 
 
+interfacing the logic with the graphics:
+here are the basic graphics that need to exist
+I'll break then into static graphics and dynamic graphics
+
+1) static: table with n of 4 players having cards in front of them (n could be 0,1,2,3,4)
+2) dynamic: the playing of a card
+   this is a transition between state (1) with n cards and n+1 cards
+3) dynamic: collecting of cards by winner of trick
+   this is a transition between state (1) with 4 cards and 0 cards
+4) static: intermediate scoreboard showing the chages in scores after the round
+5) dynamic: transition from 0 cards to scoreboard
+6) static: final score board showing the final scores of the game
+7) dynamic: transition from the game loading state to the initial state with
+   0 cards on the table
+
+none of the dynamic states are needed, you could just have it go straight to the new state
+however it would be nice to have the ablility to add these later so for now I think we
+could just have the dynamic state do nothing but then later fill them in
+
+however the static states are nessisary
+
+
+passing props to a graphics state:
+Note: all dynamic props will also have a time passed to then telling them how long to take
+state 1: input passed as an array of length 4 with the first entry (ar[0]) coresonding
+         to the card infront of player 1, the second the card in front of player 2 etc
+         and so on. -1 means no card, 0 means 2 of hearts, etc
+         eg: [-1,13,14,26] means no card infront of player1, 2spades infront of player2,
+         3spades infront of player3 and 2diamonds infront of player4
+state 2: 2 arrays, one for the previous state, and another for the next state
+state 3: 1 array for the previous state
+state 4: an array of length 4 containing the scores
+state 5: an array of length 4 containing the scores
+state 6: an array of length 4 containing the scores
+state 7: nothing
+
+
+my plan:
+If you have any objections to this let me know but basically I'm thinking
+that you could make a class for each of these staes (and any more you think we need)
+and then I could make the logic so that I just pass it the various props
+to the correct graphics state
+
+Also I basically just sat down and dumped this onto the page so I'm not claiming that this
+is a particularly good way of designing the app so If you have any ideas let me know.
+There are probably lots of things about this that are poorly thought out so please point
+them out to me
+
+
+
+
+
+
 
 
 
