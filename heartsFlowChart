@@ -1,0 +1,54 @@
+content of the gameFile:
+each gameFile start with the game name
+following this is a list of players
+the order of the players is their order around the table
+I will call all this information the header
+after the header is the body, this will vary between games
+
+the gameFile body in hearts:
+in hearts the body will first by empty
+if the body is empty the master will write a deal to the gameFile
+a deal is a permutation of the numbers 00,01...51
+(00=2hearts,01=3hearts...13=2spades...)
+notice all numbers are padded to take up 2 chars
+all players can then read this and determine their hand
+(first player takes first 13 cards, second takes second 13 etc)
+after this all cards played by a player are appended to the body
+eg: gameFile = (header goes here) (deal goes here) 39514243
+this means the cards played were 39,51,42,43 = 2clubs,aceClubs,5clubs,6clubs
+this continues until all cards are played
+by examining the body, it can be determined whose turn it is
+if hearts have broken (and therefore if one can play hearts)
+what the suit is (and therefore what suit one can play)
+and how many points each player has
+
+Here is a simplified version of the above
+
+simple hearts (no swap at start of round)
+1: master writes deal (a permutation of 00,01...51)
+2: each player determines if it is their turn and writes and a card if it is
+3: repeat 2 until no cards left
+4: repeat 1 through 3 until 100 points reached (or some number other than 100)
+
+for the swap, there needs to be a "swap ID" that tells the player what direction
+the swap will go, 0=no swap, 1=cw, 2=ccw, 3=across
+
+hearts with swap:
+1: master writes deal followed by a swap ID
+2: each player writes the 3 cards they want to swap when it is there turn
+3: each player determines if it is their turn and writes and a card if it is
+4: repeat 3 until no cards left
+5: repeat 1 through 4 until 100 points reached
+
+
+
+
+
+
+
+
+
+
+
+
+

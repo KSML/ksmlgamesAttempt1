@@ -1,3 +1,33 @@
+change heroku server so errors start with e's and non errors start with x's
+
+have the game quit when it reads a "file not found" error
+this would happen if the master quits before a non master
+
+change heroku server so that you can write rather than just append
+
+change game so that when reading in the player names it says "joining"
+but when play it says "playing" in some group of chars
+this way if you try to join and you can't it will give an error message
+also have it check for player name duplicates
+
+
+THIS HAS BEEN FIXED
+make it so that read get requests don't get backed up
+when the read frequency is increased
+THIS HAS BEEN FIXED
+
+
+
+
+NOTE: it seems you can get some kind of error when first starting up a new game
+look into this
+
+
+
+
+
+
+
 PROBLEM: what if the file is deleted (by the master) and a non master player hasen't quit yet?
 
 THING TO ADD: do the thing where the password is hidden with *'s
@@ -15,14 +45,10 @@ from the sharedFile
 
 
 
-
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-FIX THIS
+THIS HAS BEEN FIXED
 when append is given a non existant table
 fatalError is returned rather than the expected "append: table not found"
-FIX THIS
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
+THIS HAS BEEN FIXED
 
 
 

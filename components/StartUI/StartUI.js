@@ -16,6 +16,7 @@ export default class StartUI extends Component {
             password: undefined,
             tableName: undefined,
             playing: false,
+            pending: false,
         };
         this.getRequest = this.getRequest.bind(this)
         
@@ -34,7 +35,7 @@ export default class StartUI extends Component {
         this.setState({gameName:gameNameInput})
         ID = "x"+this.state.password+this.state.tableName  // HASH THIS !!!
         this.getRequest("func=new&tableID="+ID,this.create2)
-        // do a loading symbol here
+        this.setState({loading:<Text>Loading</Text>})
     }
     
     
@@ -44,13 +45,14 @@ export default class StartUI extends Component {
         else this.getRequest("func=append&input="+this.state.gameName+"&tableID="+ID,()=>{})
         // consider checking for errors
         this.goToGame()
+        this.setState({loading:<Text/>})
     }
     
-    
+                      
     join(){
         ID = "x"+this.state.password+this.state.tableName  // HASH THIS !!!
         this.getRequest("func=new&tableID="+ID,this.join2)
-        // do a loading symbol here
+        this.setState({loading:<Text>Loading</Text>})
     }
     
     
@@ -69,6 +71,7 @@ export default class StartUI extends Component {
     join3(response){
         this.setState({gameName:response})
         this.goToGame()
+        this.setState({loading:<Text/>})
     }
     
     
@@ -134,14 +137,20 @@ export default class StartUI extends Component {
     
     
     componentDidMount(){
+        // keeps the gameFile up to date while playing
+        // only makes a new request if there are no pending requests
+        
+        this.setState({loading:<Text/>})
+        
         ID = "x"+this.state.password+this.state.tableName  // HASH THIS !!!
         setInterval(() => {
-            if (this.state.playing){ // gameFile is only updated while playing
-                newGameFile = this.getRequest("func=read&tableID="+ID+"&start=0&length=1000",
-                                          (response) => this.setState({gameFile:response}))
+            if (this.state.playing && !this.state.pending){
+                this.setState({pending:true})
+                this.getRequest("func=read&tableID="+ID+"&start=0&length=1000",
+                                          (response) => this.setState({gameFile:response,pending:false}))
             }
             // only doing the first 1000 chars, make this bigger if nessisary
-        },1000)
+        },10) // once every second
     }
 
     
@@ -191,6 +200,7 @@ export default class StartUI extends Component {
             return(<View style={{padding: 30}}>
                     {credentials}
                     <Button title="Submit" onPress={() => this.join()}/>
+                    {this.state.loading}
                 </View>)
         }
         
@@ -201,15 +211,8 @@ export default class StartUI extends Component {
                         data = {[{key: 'Game1'},{key: 'Game2'}]}
                         renderItem={({item}) => <Text onPress={() => this.create(item.key)}>{item.key}</Text>}
                     />
+                    {this.state.loading}
                 </View>)
-        }
-        
-        else if (this.state.page == "Invalid Credentials"){
-            return (
-                <View style={{padding: 30}}>
-                    <Text>Invalid Credentials</Text>
-                </View>
-            );
         }
         
         else if (this.state.page == "gamePage"){
@@ -225,6 +228,12 @@ export default class StartUI extends Component {
         }
     }
 }
+
+
+
+
+
+
 
 
 
