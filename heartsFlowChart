@@ -67,12 +67,19 @@ however the static states are nessisary
 
 
 passing props to a graphics state:
-Note: all dynamic props will also have a time passed to then telling them how long to take
+Note: all dynamic states will also have a time passed to then telling them how long to take
+      also all states are passed a quit function so that it can have a quit button
+      that quits the game
+
 state 1: input passed as an array of length 4 with the first entry (ar[0]) coresonding
          to the card infront of player 1, the second the card in front of player 2 etc
          and so on. -1 means no card, 0 means 2 of hearts, etc
          eg: [-1,13,14,26] means no card infront of player1, 2spades infront of player2,
          3spades infront of player3 and 2diamonds infront of player4
+         also passed any array of length 52 of cards infront of the player
+         this contains a 0 if the player doesn't have the card, 1 if they can't play it
+         and 2 if they can play it
+         also passed a function that takes a single card tell the logic that that card was played
 state 2: 2 arrays, one for the previous state, and another for the next state
 state 3: 1 array for the previous state
 state 4: an array of length 4 containing the scores

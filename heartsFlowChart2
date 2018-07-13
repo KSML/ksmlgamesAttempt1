@@ -1,0 +1,104 @@
+My second revision of heartsFlowChart
+
+
+state1: static
+table with n of 4 players having cards in front of them (n could be 0,1,2,3,4)
+also has the hand of the user at the bottom of the screen
+props:
+quit(): when called, the game is quit and the user returns to the start page
+playCard(card): when called, the logic code is notified what card has been played
+by the user and acts acordingly
+hand: an array of length 52, each entry is 0, 1 or 2 and coresponds to a unique card
+0 means the user doesn't have the card, 1 means the user has but can't play the card
+2 means the user can play the card
+playedCards: an array of length 4, each entry coresponds to a player, 0 = player1 etc.
+an entry of -1 means no card in front of that player, otherwise the card in front
+of the player is in that entry of the array
+names: an array of length 4 each entry conresponds to a player and contains their name
+
+suggestions for how it could work:
+it could be completely static and just return the card that was pressed
+using playCard(card) or it could have that card that is pressed move to the centre of
+the screen (I think the app we used to use does this) and then ask you to click it again
+this would be a nice feature because then you can avoid acidentally choosing a card
+on the other hand it might be good to stick to something simple for the first attempt
+at the game
+
+
+
+
+Adressing your various questions / comments in the state machine picture
+
+can states 4,5, and 6 be combined?
+yes, 5 is a dynamic state going from a state with 0 cards on the table to a state
+of showing the scores, I was originally thinking of separating out the dynamic and static parts
+but I think your right that its best to just join these
+also 4 and 6 are basically the same, I originally wanted to seperate them because
+they are at different places with in the life cycle of the game however your right that we
+could just combined these
+
+when playing a card why not just send the delta (the card played) instead of the previous
+state and the next state?
+you need the previous state because this is a dynamic state, your transitioning between
+2 different versions of state 1, you need to be able to see the previous state at the start
+and the final state at the end. Here is an example:
+
+at time = 0 seconds:         state1, no cards on table
+at time = 1 second:          state1, no cards on table, begining transition
+from time = 1 to 2 seconds:  an animiation is ocuring in which a card is being played by player 1
+at time = 2 seconds:         state1, 1 card on table infront of player 1, transition complete
+at time = 3 seconds:         state1, 1 card on table infront of player 1
+
+instead of being given both the end state and the start state, the transition state could be
+given the start state and the delta. This is probably a better way of doing it then I was
+originally suggesting (maybe this is what your suggesting?) but we definitely need the start
+state so that the transition can look good
+
+as I mentioned somewhere, I think it would be good to have the transition state originally
+just be a blank screen so that we can focus on making the more critical static states
+and then fill in the transition states later. I think its a good idea in general to make
+something that works and then expand on it rather than try to make everything work at once
+
+
+"all we need to send is the cardsOnTable and figure out who had the highest card
+and make it go to them"
+you also need to send the hand because during the animation the hand will be visible
+so for this reason the entire previous state
+
+do we return which player goes next here?
+I figure its easier to just recompute this in the logic code rather than save a small
+amount of time by computing it once and returning it to the logic code
+
+
+
+some other notes and clarifications:
+the prop quit() should be passed to all states (both static and dynamic)
+so that at any time the user can quit the game
+I figure its a nice option to have plus it should be too hard to just add a button somewhere
+that does that
+
+later on we could consider also having a help button that send you to some kind of
+instruction page or a history button that lets you see the game history but
+I figure we should stick to as simple a game as possible for now
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

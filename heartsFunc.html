@@ -1,0 +1,23 @@
+<body>
+<script type="text/javascript">
+
+	// returns an array of length 52 called the hand and an array of length 4 called the score like so [hand,score]
+	// each entry of the hand contains 0, 1 or 2 = card not in hand, card not playable, card playable
+	// each entry of the score is the score of the coresponding player, eg: [32,0,11,19] (player 1 has a score of 32)
+	// as input the function takes the body and the player (a number from 1 to 4)
+	function func(body,player){
+		player -= 1
+		hand = []
+		temp = body.substring(player*26,player*26+26)
+		return body.substring(player*26,player*26+26)
+		for (var n=0; n<26; n+=2){
+			hand.push(temp.substring(0,2))
+		}
+		return hand
+
+	}
+
+	console.log(func("qwer"))
+
+</script>
+</body>
